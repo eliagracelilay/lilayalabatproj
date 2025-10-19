@@ -11,12 +11,11 @@ class Student extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'student_no', 'first_name', 'last_name', 'suffix', 'sex', 'dob', 'birthdate', 'gender',
-        'email', 'contact_number', 'address', 'department_id', 'course_id', 'academic_year_id', 'year_level', 'status'
+        'user_id', 'full_name', 'suffix', 'sex', 'birthdate',
+        'email', 'contact_number', 'address', 'course_id', 'department_id', 'academic_year_id', 'status'
     ];
 
     protected $casts = [
-        'dob' => 'date',
         'birthdate' => 'date',
     ];
 
@@ -30,10 +29,6 @@ class Student extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function enrollments()
-    {
-        return $this->hasMany(Enrollment::class);
-    }
 
     public function course()
     {

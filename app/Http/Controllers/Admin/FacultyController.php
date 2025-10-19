@@ -20,17 +20,24 @@ class FacultyController extends Controller
     public function index()
     {
         $q = request('q');
+        $department_filter = request('department_filter');
+        
         $faculties = Faculty::with('department')
             ->when($q, function($query) use ($q) {
-                $query->where('employee_no', 'like', "%$q%");
-                $query->orWhere('first_name', 'like', "%$q%");
-                $query->orWhere('last_name', 'like', "%$q%");
+                $query->where('full_name', 'like', "%$q%");
+                $query->orWhere('email', 'like', "%$q%");
             })
-            ->orderBy('last_name')
+            ->when($department_filter, function($query) use ($department_filter) {
+                $query->where('department_id', $department_filter);
+            })
+            ->orderBy('full_name')
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.faculties.index', compact('faculties','q'));
+        // Get filter options
+        $departments = Department::orderBy('name')->pluck('name', 'id');
+
+        return view('layouts.admin-react', compact('faculties', 'q', 'departments', 'department_filter'));
     }
 
     /**
@@ -41,7 +48,7 @@ class FacultyController extends Controller
     public function create()
     {
         $departments = Department::orderBy('name')->pluck('name','id');
-        return view('admin.faculties.create', compact('departments'));
+        return view('layouts.admin-react', compact('departments'));
     }
 
     /**
@@ -53,15 +60,12 @@ class FacultyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'employee_no' => 'required|string|max:50|unique:faculties,employee_no',
-            'first_name'  => 'required|string|max:100',
-            'last_name'   => 'required|string|max:100',
+            'full_name'   => 'required|string|max:200',
             'suffix'      => 'nullable|string|max:20',
-            'sex'         => 'nullable|string|max:16',
+            'sex'         => 'required|string|max:16',
             'email'       => 'required|email|max:255|unique:users,email',
             'contact_number' => 'nullable|string|max:50',
             'address'     => 'nullable|string',
-            'title'       => 'nullable|string|max:100',
             'position'    => 'nullable|string|max:100',
             'department_id' => 'nullable|exists:departments,id',
             'status'      => 'nullable|string|max:24',
@@ -69,7 +73,7 @@ class FacultyController extends Controller
 
         // Create linked user and attach faculty role
         $user = User::create([
-            'name' => $data['first_name'].' '.$data['last_name'],
+            'name' => $data['full_name'],
             'email' => $data['email'],
             'password' => Hash::make('password'),
         ]);
@@ -83,6 +87,59 @@ class FacultyController extends Controller
         Faculty::create($data);
 
         return redirect()->route('admin.faculties.index')->with('success', 'Faculty created.');
+    }
+
+    /**
+     * Store faculty via API (for React forms)
+     */
+    public function apiStore(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'full_name'   => 'required|string|max:200',
+                'suffix'      => 'nullable|string|max:20',
+                'sex'         => 'required|string|max:16',
+                'email'       => 'required|email|max:255|unique:users,email',
+                'contact_number' => 'nullable|string|max:50',
+                'address'     => 'nullable|string',
+                'position'    => 'nullable|string|max:100',
+                'department_id' => 'nullable|exists:departments,id',
+                'status'      => 'nullable|string|max:24',
+            ]);
+
+            // Create linked user and attach faculty role
+            $user = User::create([
+                'name' => $data['full_name'],
+                'email' => $data['email'],
+                'password' => Hash::make('password'),
+            ]);
+            if ($user) {
+                if ($role = Role::where('name', 'faculty')->first()) {
+                    $user->roles()->syncWithoutDetaching([$role->id]);
+                }
+                $data['user_id'] = $user->id;
+            }
+
+            $faculty = Faculty::create($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Faculty created successfully',
+                'faculty' => $faculty->load('department')
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating faculty: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -105,7 +162,7 @@ class FacultyController extends Controller
     public function edit(Faculty $faculty)
     {
         $departments = Department::orderBy('name')->pluck('name','id');
-        return view('admin.faculties.edit', compact('faculty','departments'));
+        return view('layouts.admin-react', compact('faculty','departments'));
     }
 
     /**
@@ -118,15 +175,12 @@ class FacultyController extends Controller
     public function update(Request $request, Faculty $faculty)
     {
         $data = $request->validate([
-            'employee_no' => 'required|string|max:50|unique:faculties,employee_no,' . $faculty->id,
-            'first_name'  => 'required|string|max:100',
-            'last_name'   => 'required|string|max:100',
+            'full_name'   => 'required|string|max:200',
             'suffix'      => 'nullable|string|max:20',
-            'sex'         => 'nullable|string|max:16',
+            'sex'         => 'required|string|max:16',
             'email'       => 'required|email|max:255|unique:users,email,' . ($faculty->user_id ?? 'NULL'),
             'contact_number' => 'nullable|string|max:50',
             'address'     => 'nullable|string',
-            'title'       => 'nullable|string|max:100',
             'position'    => 'nullable|string|max:100',
             'department_id' => 'nullable|exists:departments,id',
             'status'      => 'nullable|string|max:24',
@@ -137,13 +191,13 @@ class FacultyController extends Controller
             $user = User::find($faculty->user_id);
             if ($user) {
                 $user->update([
-                    'name' => $data['first_name'].' '.$data['last_name'],
+                    'name' => $data['full_name'],
                     'email' => $data['email'],
                 ]);
             }
         } else {
             $user = User::create([
-                'name' => $data['first_name'].' '.$data['last_name'],
+                'name' => $data['full_name'],
                 'email' => $data['email'],
                 'password' => Hash::make('password'),
             ]);
@@ -159,6 +213,67 @@ class FacultyController extends Controller
     }
 
     /**
+     * Update faculty via API (for React forms)
+     */
+    public function apiUpdate(Request $request, Faculty $faculty)
+    {
+        try {
+            $data = $request->validate([
+                'full_name'   => 'required|string|max:200',
+                'suffix'      => 'nullable|string|max:20',
+                'sex'         => 'required|string|max:16',
+                'email'       => 'required|email|max:255|unique:users,email,' . ($faculty->user_id ?? 'NULL'),
+                'contact_number' => 'nullable|string|max:50',
+                'address'     => 'nullable|string',
+                'position'    => 'nullable|string|max:100',
+                'department_id' => 'nullable|exists:departments,id',
+                'status'      => 'nullable|string|max:24',
+            ]);
+
+            // Ensure linked user exists and is updated
+            if ($faculty->user_id) {
+                $user = User::find($faculty->user_id);
+                if ($user) {
+                    $user->update([
+                        'name' => $data['full_name'],
+                        'email' => $data['email'],
+                    ]);
+                }
+            } else {
+                $user = User::create([
+                    'name' => $data['full_name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make('password'),
+                ]);
+                if ($role = Role::where('name', 'faculty')->first()) {
+                    $user->roles()->syncWithoutDetaching([$role->id]);
+                }
+                $data['user_id'] = $user->id;
+            }
+
+            $faculty->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Faculty updated successfully',
+                'faculty' => $faculty->load('department')
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating faculty: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Faculty  $faculty
@@ -167,7 +282,7 @@ class FacultyController extends Controller
     public function destroy(Faculty $faculty)
     {
         $faculty->delete();
-        return redirect()->route('admin.settings.index')->with(['success' => 'Faculty archived.', 'tab' => 'security']);
+        return redirect()->route('admin.faculties.index')->with('success', 'Faculty archived successfully.');
     }
 
     public function restore($id)
@@ -178,6 +293,65 @@ class FacultyController extends Controller
             return redirect()->route('admin.settings.index')->with(['success' => 'Faculty restored.', 'tab' => 'security']);
         }
         return back();
+    }
+
+    public function forceDelete($id)
+    {
+        $faculty = Faculty::withTrashed()->findOrFail($id);
+        
+        // Delete associated user account if exists
+        if ($faculty->user_id) {
+            $user = User::find($faculty->user_id);
+            if ($user) {
+                $user->delete();
+            }
+        }
+        
+        // Permanently delete the faculty
+        $faculty->forceDelete();
+        
+        return redirect()->route('admin.settings.index')->with(['success' => 'Faculty permanently deleted.', 'tab' => 'security']);
+    }
+
+    /**
+     * API method to get faculties data for React components
+     */
+    public function apiIndex()
+    {
+        $q = request('q');
+        $department_filter = request('department_filter');
+        
+        $faculties = Faculty::with('department')
+            ->when($q, function($query) use ($q) {
+                $query->where('full_name', 'like', "%$q%");
+                $query->orWhere('email', 'like', "%$q%");
+            })
+            ->when($department_filter, function($query) use ($department_filter) {
+                $query->where('department_id', $department_filter);
+            })
+            ->orderBy('full_name')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'faculties' => $faculties->items(),
+            'pagination' => [
+                'current_page' => $faculties->currentPage(),
+                'last_page' => $faculties->lastPage(),
+                'per_page' => $faculties->perPage(),
+                'total' => $faculties->total()
+            ]
+        ]);
+    }
+
+    /**
+     * Archive a faculty
+     */
+    public function archive(Faculty $faculty)
+    {
+        // Soft delete the faculty (this will remove them from main list)
+        $faculty->delete();
+        return response()->json(['message' => 'Faculty archived successfully']);
     }
 }
 

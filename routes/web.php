@@ -2,15 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\StudentController as AdminStudentController;
-use App\Http\Controllers\Admin\FacultyController as AdminFacultyController;
-use App\Http\Controllers\Admin\CourseController as AdminCourseController;
-use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController;
-use App\Http\Controllers\Admin\ReportController as AdminReportController;
-use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
-use App\Http\Controllers\Admin\AcademicYearController as AdminAcademicYearController;
-use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\FacultyController;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,22 +31,52 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
-    Route::resource('students', AdminStudentController::class);
-    Route::resource('faculties', AdminFacultyController::class);
-    Route::resource('courses', AdminCourseController::class);
-    Route::resource('departments', AdminDepartmentController::class);
-    Route::get('reports', [AdminReportController::class, 'index'])->name('reports.index');
-    Route::get('reports/export/{type}', [AdminReportController::class, 'export'])->name('reports.export');
-    Route::get('settings', [AdminSettingsController::class, 'index'])->name('settings.index');
-    Route::post('academic-years/{id}/restore', [AdminAcademicYearController::class, 'restore'])->name('academic-years.restore');
-    Route::post('students/{id}/restore', [AdminStudentController::class, 'restore'])->name('students.restore');
-    Route::post('faculties/{id}/restore', [AdminFacultyController::class, 'restore'])->name('faculties.restore');
-    Route::post('courses/{id}/restore', [AdminCourseController::class, 'restore'])->name('courses.restore');
-    Route::post('departments/{id}/restore', [AdminDepartmentController::class, 'restore'])->name('departments.restore');
-    Route::resource('academic-years', AdminAcademicYearController::class)->parameters([
-        'academic-years' => 'academicYear'
-    ])->except(['show']);
+// Logout route
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
+
+// Admin Routes - Using proper individual controllers
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard routes
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    
+    // Student management routes (page-rendering GETs only)
+    Route::resource('students', StudentController::class)->only(['index', 'create', 'show', 'edit']);
+    
+    // Faculty management routes (page-rendering GETs only)
+    Route::resource('faculties', FacultyController::class)->only(['index', 'create', 'show', 'edit']);
+    
+    // Course management routes (page-rendering GETs only)
+    Route::resource('courses', CourseController::class)->only(['index', 'create', 'show', 'edit']);
+    
+    // Department management routes (page-rendering GETs only)
+    Route::resource('departments', DepartmentController::class)->only(['index', 'create', 'show', 'edit']);
+    
+    // Report routes
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    
+    // Settings routes (GET page only) — non-GET actions were moved to API
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    
+    // Settings restore and delete routes
+    Route::post('/settings/profiles/{id}/restore', [SettingsController::class, 'restoreProfile'])->name('settings.profiles.restore');
+    Route::delete('/settings/profiles/{id}/force-delete', [SettingsController::class, 'forceDeleteProfile'])->name('settings.profiles.force-delete');
+    Route::post('/settings/students/{id}/restore', [SettingsController::class, 'restoreStudent'])->name('settings.students.restore');
+    Route::delete('/settings/students/{id}/force-delete', [SettingsController::class, 'forceDeleteStudent'])->name('settings.students.force-delete');
+    Route::post('/settings/faculties/{id}/restore', [SettingsController::class, 'restoreFaculty'])->name('settings.faculties.restore');
+    Route::delete('/settings/faculties/{id}/force-delete', [SettingsController::class, 'forceDeleteFaculty'])->name('settings.faculties.force-delete');
+    Route::post('/settings/courses/{id}/restore', [SettingsController::class, 'restoreCourse'])->name('settings.courses.restore');
+    Route::delete('/settings/courses/{id}/force-delete', [SettingsController::class, 'forceDeleteCourse'])->name('settings.courses.force-delete');
+    Route::post('/settings/departments/{id}/restore', [SettingsController::class, 'restoreDepartment'])->name('settings.departments.restore');
+    Route::delete('/settings/departments/{id}/force-delete', [SettingsController::class, 'forceDeleteDepartment'])->name('settings.departments.force-delete');
+    Route::post('/settings/academic-years/{id}/restore', [SettingsController::class, 'restoreAcademicYear'])->name('settings.academic-years.restore');
+    Route::delete('/settings/academic-years/{id}/force-delete', [SettingsController::class, 'forceDeleteAcademicYear'])->name('settings.academic-years.force-delete');
+    
+    // Profile routes (GET page only) — update/archive moved to API
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 });
+
+// NOTE: API routes (previously here) were moved to routes/api.php

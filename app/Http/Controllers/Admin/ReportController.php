@@ -27,10 +27,10 @@ class ReportController extends Controller
         $results = collect();
         $summary = [];
         if ($type === 'students') {
-            $query = Student::with(['department','course']);
+            $query = Student::with(['department','course','academicYear']);
             if ($departmentId) $query->where('department_id', $departmentId);
             if ($courseId) $query->where('course_id', $courseId);
-            $results = $query->orderBy('last_name')->paginate(10)->withQueryString();
+            $results = $query->orderBy('full_name')->paginate(10)->withQueryString();
             $summary = [
                 'Department' => optional(Department::find($departmentId))->name ?: 'All',
                 'Course' => optional(Course::find($courseId))->title ?: 'All',
@@ -38,7 +38,7 @@ class ReportController extends Controller
         } elseif ($type === 'faculties') {
             $query = Faculty::with('department');
             if ($departmentId) $query->where('department_id', $departmentId);
-            $results = $query->orderBy('last_name')->paginate(10)->withQueryString();
+            $results = $query->orderBy('full_name')->paginate(10)->withQueryString();
             $summary = [
                 'Department' => optional(Department::find($departmentId))->name ?: 'All',
             ];
@@ -53,7 +53,7 @@ class ReportController extends Controller
             $results = Department::orderBy('code')->paginate(10)->withQueryString();
         }
 
-        return view('admin.reports.index', compact(
+        return view('layouts.admin-react', compact(
             'type','departmentId','courseId','years','selectedYear','departments','courses','results','summary'
         ));
     }
@@ -67,5 +67,49 @@ class ReportController extends Controller
             ($dept ? ' for Department ID '.$dept : '').
             ($course ? ' and Course ID '.$course : '');
         return back()->with('success', $msg);
+    }
+
+    /**
+     * API method to get reports data for React components
+     */
+    public function apiIndex(Request $request)
+    {
+        $type = $request->input('type', 'students');
+        $departmentId = $request->input('department_id');
+        $courseId = $request->input('course_id');
+
+        $results = collect();
+        if ($type === 'students') {
+            $query = Student::with(['department','course','academicYear']);
+            if ($departmentId) $query->where('department_id', $departmentId);
+            if ($courseId) $query->where('course_id', $courseId);
+            $results = $query->orderBy('full_name')->paginate(10)->withQueryString();
+        } elseif ($type === 'faculties') {
+            $query = Faculty::with('department');
+            if ($departmentId) $query->where('department_id', $departmentId);
+            $results = $query->orderBy('full_name')->paginate(10)->withQueryString();
+        } elseif ($type === 'courses') {
+            $query = Course::with('department');
+            if ($departmentId) $query->where('department_id', $departmentId);
+            $results = $query->orderBy('code')->paginate(10)->withQueryString();
+        } else {
+            $results = Department::orderBy('code')->paginate(10)->withQueryString();
+        }
+
+        return response()->json([
+            'results' => $results->items(),
+            'summary' => [
+                'type' => $type,
+                'department_id' => $departmentId,
+                'course_id' => $courseId,
+                'total' => $results->total()
+            ],
+            'pagination' => [
+                'current_page' => $results->currentPage(),
+                'last_page' => $results->lastPage(),
+                'per_page' => $results->perPage(),
+                'total' => $results->total()
+            ]
+        ]);
     }
 }

@@ -11,7 +11,7 @@ class Faculty extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'employee_no', 'first_name', 'last_name', 'suffix', 'sex', 'email', 'contact_number', 'address', 'title', 'position', 'department_id', 'status'
+        'user_id', 'full_name', 'suffix', 'sex', 'email', 'contact_number', 'address', 'position', 'department_id', 'status'
     ];
 
     public function user()

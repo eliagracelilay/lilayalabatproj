@@ -1,0 +1,249 @@
+// System Settings Styles
+
+// Settings Container
+.settings-container {
+  .settings-tabs {
+    margin-bottom: 2rem;
+    
+    .nav.nav-pills {
+      gap: 0.5rem;
+      justify-content: center;
+      
+      .nav-link {
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        
+        // Inactive state
+        background-color: #f8f9fa;
+        color: #6c757d;
+        
+        // Active state for each tab
+        &.active {
+          background-color: #6f42c1;
+          color: white;
+        }
+        
+        &:hover:not(.active) {
+          background-color: #e9ecef;
+          color: #495057;
+        }
+      }
+    }
+  }
+  
+  .settings-content {
+    .settings-panel {
+      .panel-header {
+        margin-bottom: 2rem;
+        
+        h5 {
+          color: #495057;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          color: #6c757d;
+          margin-bottom: 0;
+        }
+      }
+      
+      .form-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9ecef;
+        
+        h6 {
+          color: #495057;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+          margin-bottom: 1rem;
+          
+          .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            
+            .text-danger {
+              color: #dc3545 !important;
+            }
+          }
+          
+          .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 0.75rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            
+            &:focus {
+              border-color: #6f42c1;
+              box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+            }
+            
+            &.is-invalid {
+              border-color: #dc3545;
+              
+              &:focus {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+              }
+            }
+          }
+          
+          .invalid-feedback {
+            display: block;
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+          }
+        }
+        
+        .form-actions {
+          margin-top: 1.5rem;
+          
+          .btn {
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            
+            &.btn-brand {
+              background-color: #6f42c1;
+              border-color: #6f42c1;
+              color: white;
+              
+              &:hover {
+                background-color: #5a359a;
+                border-color: #5a359a;
+              }
+              
+              &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+              }
+            }
+            
+            &.btn-secondary {
+              background-color: #6c757d;
+              border-color: #6c757d;
+              color: white;
+              
+              &:hover {
+                background-color: #545b62;
+                border-color: #545b62;
+              }
+            }
+          }
+          
+          .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+          }
+        }
+      }
+      
+      .table-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9ecef;
+        
+        h6 {
+          color: #495057;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+        }
+        
+        .table {
+          margin-bottom: 0;
+          
+          th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+            padding: 1rem 0.75rem;
+            border-top: none;
+          }
+          
+          td {
+            padding: 0.875rem 0.75rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f3f4;
+          }
+          
+          tbody tr {
+            transition: background-color 0.15s ease;
+            
+            &:hover {
+              background-color: #f8f9fa;
+            }
+            
+            &:last-child td {
+              border-bottom: none;
+            }
+          }
+        }
+        
+        .status-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          
+          &.status-active {
+            background-color: #d4edda;
+            color: #155724;
+          }
+          
+          &.status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+          }
+          
+          &.status-completed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .settings-container {
+    .settings-tabs {
+      .nav.nav-pills {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        .nav-link {
+          text-align: center;
+        }
+      }
+    }
+    
+    .settings-content {
+      .settings-panel {
+        .row {
+          .col-md-4, .col-md-6, .col-md-8 {
+            margin-bottom: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+}

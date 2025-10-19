@@ -4,12 +4,23 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-require('./bootstrap');
+import './bootstrap';
 
-/**
- * Next, we will create a fresh React component instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+// Import React and ReactDOM
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
-require('./components/Example');
+// Import Admin App
+import AdminApp from './AdminApp';
+
+// Initialize React components when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Admin App if admin container exists
+    const adminContainer = document.getElementById('admin-app');
+    if (adminContainer) {
+        const root = createRoot(adminContainer);
+        root.render(<AdminApp />);
+    }
+});
+
+// Remove old Vue component require

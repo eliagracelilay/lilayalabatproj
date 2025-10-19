@@ -13,7 +13,7 @@ class Department extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['code', 'name', 'location', 'status'];
+    protected $fillable = ['code', 'name', 'description', 'location', 'status'];
 
     public function courses()
     {

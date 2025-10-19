@@ -26,7 +26,7 @@ class CourseController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.courses.index', compact('courses','q'));
+        return view('layouts.admin-react', compact('courses','q'));
     }
 
     /**
@@ -37,7 +37,7 @@ class CourseController extends Controller
     public function create()
     {
         $departments = Department::orderBy('name')->pluck('name','id');
-        return view('admin.courses.create', compact('departments'));
+        return view('layouts.admin-react', compact('departments'));
     }
 
     /**
@@ -81,7 +81,7 @@ class CourseController extends Controller
     public function edit(Course $course)
     {
         $departments = Department::orderBy('name')->pluck('name','id');
-        return view('admin.courses.edit', compact('course','departments'));
+        return view('layouts.admin-react', compact('course','departments'));
     }
 
     /**
@@ -115,7 +115,7 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         $course->delete();
-        return redirect()->route('admin.settings.index')->with(['success' => 'Course archived.', 'tab' => 'security']);
+        return redirect()->route('admin.courses.index')->with('success', 'Course archived successfully.');
     }
 
     public function restore($id)
@@ -126,6 +126,134 @@ class CourseController extends Controller
             return redirect()->route('admin.settings.index')->with(['success' => 'Course restored.', 'tab' => 'security']);
         }
         return back();
+    }
+
+    public function forceDelete($id)
+    {
+        $course = Course::withTrashed()->findOrFail($id);
+        
+        // Permanently delete the course
+        $course->forceDelete();
+        
+        return redirect()->route('admin.settings.index')->with(['success' => 'Course permanently deleted.', 'tab' => 'security']);
+    }
+
+    /**
+     * Store course via API (for React forms)
+     */
+    public function apiStore(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'department_id' => 'required|exists:departments,id',
+                'code' => 'required|string|max:50|unique:courses,code',
+                'title' => 'required|string|max:255',
+                'units' => 'required|integer|min:1|max:10',
+                'status' => 'nullable|string|max:24',
+            ]);
+
+            $course = Course::create($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Course created successfully',
+                'course' => $course->load('department')
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating course: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update course via API (for React forms)
+     */
+    public function apiUpdate(Request $request, Course $course)
+    {
+        try {
+            $data = $request->validate([
+                'department_id' => 'required|exists:departments,id',
+                'code' => 'required|string|max:50|unique:courses,code,' . $course->id,
+                'title' => 'required|string|max:255',
+                'units' => 'required|integer|min:1|max:10',
+                'status' => 'nullable|string|max:24',
+            ]);
+
+            $course->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Course updated successfully',
+                'course' => $course->load('department')
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating course: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API method to get courses data for React components
+     */
+    public function apiIndex()
+    {
+        $q = request('q');
+        $courses = Course::with('department')
+            ->when($q, function($query) use ($q) {
+                $query->where('code', 'like', "%$q%");
+                $query->orWhere('title', 'like', "%$q%");
+            })
+            ->orderBy('code')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'courses' => $courses->items(),
+            'pagination' => [
+                'current_page' => $courses->currentPage(),
+                'last_page' => $courses->lastPage(),
+                'per_page' => $courses->perPage(),
+                'total' => $courses->total()
+            ]
+        ]);
+    }
+
+    /**
+     * Archive (soft delete) a course
+     */
+    public function archive(Course $course)
+    {
+        try {
+            $course->delete(); // This will soft delete if SoftDeletes trait is used
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Course archived successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error archiving course: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
 

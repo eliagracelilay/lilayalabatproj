@@ -24,7 +24,7 @@ class DepartmentController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.departments.index', compact('departments','q'));
+        return view('layouts.admin-react', compact('departments','q'));
     }
 
     /**
@@ -34,7 +34,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.departments.create');
+        return view('layouts.admin-react');
     }
 
     /**
@@ -65,7 +65,7 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        return view('admin.departments.edit', compact('department'));
+        return view('layouts.admin-react', compact('department'));
     }
 
     /**
@@ -98,7 +98,7 @@ class DepartmentController extends Controller
     public function destroy(Department $department)
     {
         $department->delete();
-        return redirect()->route('admin.departments.index')->with('success', 'Department archived.');
+        return redirect()->route('admin.departments.index')->with('success', 'Department archived successfully.');
     }
 
     public function restore($id)
@@ -106,8 +106,131 @@ class DepartmentController extends Controller
         $department = Department::withTrashed()->findOrFail($id);
         if ($department->trashed()) {
             $department->restore();
-            return back()->with('success', 'Department restored.');
+            return redirect()->route('admin.settings.index')->with(['success' => 'Department restored.', 'tab' => 'security']);
         }
         return back();
+    }
+
+    public function forceDelete($id)
+    {
+        $department = Department::withTrashed()->findOrFail($id);
+        
+        // Permanently delete the department
+        $department->forceDelete();
+        
+        return redirect()->route('admin.settings.index')->with(['success' => 'Department permanently deleted.', 'tab' => 'security']);
+    }
+
+    /**
+     * API method to get departments data for React components
+     */
+    public function apiIndex()
+    {
+        $q = request('q');
+        $departments = Department::when($q, function($query) use ($q) {
+                $query->where('code', 'like', "%$q%");
+                $query->orWhere('name', 'like', "%$q%");
+            })
+            ->orderBy('code')
+            ->paginate(10)
+            ->withQueryString();
+
+        return response()->json([
+            'departments' => $departments->items(),
+            'pagination' => [
+                'current_page' => $departments->currentPage(),
+                'last_page' => $departments->lastPage(),
+                'per_page' => $departments->perPage(),
+                'total' => $departments->total()
+            ]
+        ]);
+    }
+
+    /**
+     * API method to create a new department
+     */
+    public function apiStore(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'code' => 'required|string|max:20|unique:departments,code',
+                'name' => 'required|string|max:200',
+                'location' => 'nullable|string|max:200',
+                'status' => 'required|in:active,inactive'
+            ]);
+
+            $department = Department::create($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Department created successfully.',
+                'department' => $department
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating department: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API method to update a department
+     */
+    public function apiUpdate(Request $request, Department $department)
+    {
+        try {
+            $data = $request->validate([
+                'code' => 'required|string|max:20|unique:departments,code,' . $department->id,
+                'name' => 'required|string|max:200',
+                'location' => 'nullable|string|max:200',
+                'status' => 'required|in:active,inactive'
+            ]);
+
+            $department->update($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Department updated successfully.',
+                'department' => $department
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating department: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Archive (soft delete) a department
+     */
+    public function archive(Department $department)
+    {
+        try {
+            $department->delete(); // This will soft delete if SoftDeletes trait is used
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Department archived successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error archiving department: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

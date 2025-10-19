@@ -13,13 +13,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $data = [
-            'students' => Student::count(),
-            'faculties' => Faculty::count(),
-            'courses' => Course::count(),
-            'departments' => Department::count(),
+        $stats = [
+            'students' => Student::whereNull('deleted_at')->count(),
+            'faculties' => Faculty::whereNull('deleted_at')->count(),
+            'courses' => Course::whereNull('deleted_at')->count(),
+            'departments' => Department::whereNull('deleted_at')->count(),
         ];
 
-        return view('admin.dashboard', $data);
+        return view('layouts.admin-react', compact('stats'));
+    }
+
+    public function getStats()
+    {
+        return response()->json([
+            'students' => Student::whereNull('deleted_at')->count(),
+            'faculties' => Faculty::whereNull('deleted_at')->count(),
+            'courses' => Course::whereNull('deleted_at')->count(),
+            'departments' => Department::whereNull('deleted_at')->count(),
+        ]);
     }
 }

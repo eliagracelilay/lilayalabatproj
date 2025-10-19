@@ -6,16 +6,16 @@
         <div class="col-12 d-flex justify-content-center">
             <div class="card soft portal-card">
                 <div class="card-body">
-                    <div class="text-center mb-4 mt-2">
-                        <div class="display-5 mb-2">🎓</div>
-                        <h2 class="fw-semibold mb-1">Academic Portal</h2>
-                        <div class="text-muted">Sign in to your account</div>
+                    <div class="portal-header">
+                        <div class="portal-icon">🎓</div>
+                        <h2 class="portal-title">Academic Portal</h2>
+                        <div class="portal-subtitle">Sign in to your account</div>
                     </div>
 
-                    <form method="POST" action="{{ route('login') }}" class="mx-auto" style="max-width:520px;">
+                    <form method="POST" action="{{ route('login') }}" class="portal-form">
                         @csrf
 
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="email" class="form-label">User ID</label>
                             <input id="email" type="email" class="form-control portal-input @error('email') is-invalid @enderror" name="email" value="{{ old('email', 'admin@university.test') }}" required autocomplete="email" autofocus>
                             @error('email')
@@ -23,7 +23,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="password" class="form-label">Password</label>
                             <input id="password" type="password" class="form-control portal-input @error('password') is-invalid @enderror" name="password" value="password" required autocomplete="current-password">
                             @error('password')
@@ -31,7 +31,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label for="role" class="form-label">I am a:</label>
                             <select id="role" name="role" class="form-select portal-input">
                                 <option selected>Select an option</option>
@@ -45,8 +45,8 @@
                         </button>
                     </form>
 
-                    <div class="text-center mt-3">
-                        <a href="{{ route('admin.dashboard') }}" class="small text-decoration-none">Admin</a>
+                    <div class="portal-footer">
+                        <a href="{{ route('admin.dashboard') }}" class="portal-link">Admin</a>
                     </div>
                 </div>
             </div>
