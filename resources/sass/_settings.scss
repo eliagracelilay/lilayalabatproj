@@ -1,7 +1,10 @@
-// System Settings Styles
+// System Settings Styles (Coral Unique)
 
 // Settings Container
 .settings-container {
+  $coral: #e17b7b;
+  $coral-dark: #cc6a6a;
+  $shell: #fff7f7;
   .settings-tabs {
     margin-bottom: 2rem;
     
@@ -17,18 +20,19 @@
         transition: all 0.3s ease;
         
         // Inactive state
-        background-color: #f8f9fa;
-        color: #6c757d;
+        background-color: #fff7f7;
+        color: #5a2f2f;
         
         // Active state for each tab
         &.active {
-          background-color: #6f42c1;
-          color: white;
+          background-color: $coral;
+          color: #0f0f0f;
+          font-weight: 700;
         }
         
         &:hover:not(.active) {
-          background-color: #e9ecef;
-          color: #495057;
+          background-color: #ffecec;
+          color: #0f0f0f;
         }
       }
     }
@@ -52,24 +56,24 @@
       }
       
       .form-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e9ecef;
+        background: linear-gradient(180deg, lighten($coral, 14%), $coral);
+        border-radius: 20px;
+        padding: 1.25rem;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        border: 0;
         
         h6 {
-          color: #495057;
-          font-weight: 600;
-          margin-bottom: 1.5rem;
+          color: #0f0f0f;
+          font-weight: 800;
+          margin-bottom: 1.25rem;
         }
         
         .form-group {
           margin-bottom: 1rem;
           
           .form-label {
-            font-weight: 500;
-            color: #495057;
+            font-weight: 700;
+            color: #0f0f0f;
             margin-bottom: 0.5rem;
             
             .text-danger {
@@ -78,14 +82,15 @@
           }
           
           .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid #ced4da;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,.08);
+            background: #fff7f7;
             padding: 0.75rem;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             
             &:focus {
-              border-color: #6f42c1;
-              box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+              border-color: $coral;
+              box-shadow: 0 0 0 0.2rem rgba(225, 123, 123, 0.25);
             }
             
             &.is-invalid {
@@ -97,32 +102,31 @@
               }
             }
           }
-          
-          .invalid-feedback {
-            display: block;
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
+
+          // Toggle switch
+          .form-switch .form-check-input {
+            width: 2.5em; height: 1.3em; background-color: #e9ecef; border: 0;
+            &:checked { background-color: $coral; }
           }
+
         }
         
         .form-actions {
           margin-top: 1.5rem;
           
           .btn {
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 0.75rem 1.5rem;
             font-weight: 500;
             transition: all 0.15s ease;
             
             &.btn-brand {
-              background-color: #6f42c1;
-              border-color: #6f42c1;
-              color: white;
+              background-color: #111827;
+              border-color: #111827;
+              color: #fff;
               
               &:hover {
-                background-color: #5a359a;
-                border-color: #5a359a;
+                filter: brightness(1.05);
               }
               
               &:disabled {
@@ -132,13 +136,13 @@
             }
             
             &.btn-secondary {
-              background-color: #6c757d;
-              border-color: #6c757d;
-              color: white;
+              background-color: transparent;
+              border-color: $coral;
+              color: #5a2f2f;
               
               &:hover {
-                background-color: #545b62;
-                border-color: #545b62;
+                background-color: $coral;
+                color: #0f0f0f;
               }
             }
           }
@@ -151,11 +155,11 @@
       }
       
       .table-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e9ecef;
+        background: linear-gradient(180deg, lighten($coral, 16%), $coral);
+        border-radius: 20px;
+        padding: 1.25rem;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        border: 0;
         
         h6 {
           color: #495057;
@@ -167,10 +171,10 @@
           margin-bottom: 0;
           
           th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            font-weight: 600;
-            color: #495057;
+            background-color: rgba(255,255,255,.85);
+            border-bottom: 2px solid #f1d4d4;
+            font-weight: 800;
+            color: #0f0f0f;
             padding: 1rem 0.75rem;
             border-top: none;
           }
@@ -178,49 +182,23 @@
           td {
             padding: 0.875rem 0.75rem;
             vertical-align: middle;
-            border-bottom: 1px solid #f1f3f4;
+            border-bottom: 1px solid #f7e2e2;
           }
-          
+
           tbody tr {
             transition: background-color 0.15s ease;
             
-            &:hover {
-              background-color: #f8f9fa;
-            }
+            &:hover { background-color: #fff7f7; }
             
             &:last-child td {
               border-bottom: none;
             }
           }
         }
-        
-        .status-badge {
-          padding: 0.25rem 0.75rem;
-          border-radius: 20px;
-          font-size: 0.75rem;
-          font-weight: 500;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          
-          &.status-active {
-            background-color: #d4edda;
-            color: #155724;
-          }
-          
-          &.status-inactive {
-            background-color: #f8d7da;
-            color: #721c24;
-          }
-          
-          &.status-completed {
-            background-color: #d1ecf1;
-            color: #0c5460;
-          }
         }
       }
     }
   }
-}
 
 // Responsive adjustments
 @media (max-width: 768px) {

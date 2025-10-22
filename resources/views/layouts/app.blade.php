@@ -25,10 +25,6 @@
 </head>
 <body>
     <div id="app">
-        <div class="brand-banner d-none d-md-block">
-            <span class="brand-gradient">FENKABLE UNIVERSITY</span>
-        </div>
-
         <main class="py-4 auth-shell">
             @yield('content')
         </main>

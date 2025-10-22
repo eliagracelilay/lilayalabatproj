@@ -145,57 +145,13 @@ const StudentsIndex = () => {
             )}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="mb-0">Students</h4>
-                <a href="/admin/students/create" className="btn btn-sm btn-brand">＋ New Student</a>
+                <div className="page-actions">
+                    <a href="/admin/settings?tab=security" className="btn btn-sm btn-archive-green">Archive</a>
+                    <a href="/admin/students/create" className="btn btn-sm btn-add-black">+ Add Student</a>
+                </div>
             </div>
 
-            <form className="student-filters">
-                <div className="row filter-row">
-                    <div className="col-auto">
-                        <input 
-                            type="text" 
-                            value={filters.q}
-                            onChange={(e) => handleFilterChange('q', e.target.value)}
-                            className="form-control filter-input" 
-                            placeholder="Search by ID/Name" 
-                        />
-                    </div>
-                    <div className="col-auto">
-                        <select 
-                            value={filters.department_filter}
-                            onChange={(e) => handleFilterChange('department_filter', e.target.value)}
-                            className="form-select filter-select"
-                        >
-                            <option value="">All Departments</option>
-                            {departments.map(dept => (
-                                <option key={dept.id} value={dept.id}>{dept.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="col-auto">
-                        <select 
-                            value={filters.course_filter}
-                            onChange={(e) => handleFilterChange('course_filter', e.target.value)}
-                            className="form-select filter-select"
-                        >
-                            <option value="">All Courses</option>
-                            {courses.map(course => (
-                                <option key={course.id} value={course.id}>{course.title}</option>
-                            ))}
-                        </select>
-                    </div>
-                    {hasActiveFilters && (
-                        <div className="col-auto">
-                            <button 
-                                type="button"
-                                onClick={clearFilters}
-                                className="btn btn-outline-danger clear-filters-btn"
-                            >
-                                Clear Filters
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </form>
+            {/* filters removed per request */}
 
             <div className="students-table">
                 <div className="student-card card shadow-sm">
@@ -229,8 +185,8 @@ const StudentsIndex = () => {
                                                 {student.suffix && <span className="text-muted"> {student.suffix}</span>}
                                             </td>
                                             <td>{student.email || '—'}</td>
-                                            <td>{student.department?.name || '—'}</td>
-                                            <td>{student.course?.title || '—'}</td>
+                                            <td>{student.department?.code || student.department?.name || '—'}</td>
+                                            <td>{student.course?.code || student.course?.title || '—'}</td>
                                             <td>{student.academic_year ? `${student.academic_year.start_year} - ${student.academic_year.end_year}` : '—'}</td>
                                             <td>
                                                 <span className={`status-badge status-${student.status?.toLowerCase()}`}>

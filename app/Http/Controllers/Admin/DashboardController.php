@@ -32,4 +32,22 @@ class DashboardController extends Controller
             'departments' => Department::whereNull('deleted_at')->count(),
         ]);
     }
+
+    /**
+     * Return simple recent activity counts for today.
+     */
+    public function getActivity()
+    {
+        $today = now()->toDateString();
+
+        return response()->json([
+            'today' => [
+                'students_added' => Student::whereNull('deleted_at')->whereDate('created_at', $today)->count(),
+                'faculties_added' => Faculty::whereNull('deleted_at')->whereDate('created_at', $today)->count(),
+                'departments_added' => Department::whereNull('deleted_at')->whereDate('created_at', $today)->count(),
+                'courses_added' => Course::whereNull('deleted_at')->whereDate('created_at', $today)->count(),
+            ],
+            'ts' => now()->toISOString(),
+        ]);
+    }
 }

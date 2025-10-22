@@ -23,29 +23,29 @@ const AdminLayout = ({ children, user }) => {
             <div className="row g-3">
                 <div className="col-md-3">
                     <div className="side-card p-3">
-                        <div className="side-heading">System Overview</div>
+                        <div className="side-heading">Admin Dashboard</div>
                         
                         <a href="/admin/dashboard" className={`side-link ${window.location.pathname === '/admin/dashboard' || window.location.pathname === '/admin' ? 'active' : ''}`}>
                             <span>📊</span> Dashboard
                         </a>
                         
                         <a href="/admin/students" className={`side-link ${window.location.pathname === '/admin/students' ? 'active' : ''}`}>
-                            <span>🎓</span> Student Management
+                            <span>🎓</span> Student
                         </a>
                         
                         <a href="/admin/faculties" className={`side-link ${window.location.pathname === '/admin/faculties' ? 'active' : ''}`}>
-                            <span>🧑‍🏫</span> Faculty Management
+                            <span>🧑‍🏫</span> Faculty
                         </a>
                         
                         <a href="/admin/reports" className={`side-link ${window.location.pathname === '/admin/reports' ? 'active' : ''}`}>
-                            <span>📋</span> Report
+                            <span>📋</span> Reports
                         </a>
                         
                         <a href="/admin/settings" className={`side-link ${window.location.pathname === '/admin/settings' ? 'active' : ''}`}>
                             <span>⚙️</span> System Settings
                         </a>
                         
-                        <div className="mt-4">
+                        <div className="side-footer mt-4">
                             <a href="/admin/profile" className="admin-section" style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div className="small text-muted mb-1">Administrator</div>
                                 <div className="small fw-semibold">Admin</div>

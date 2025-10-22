@@ -1,4 +1,4 @@
-// Authentication Styles
+// Authentication Styles (Coral Theme)
 
 // Main auth layout
 .auth-shell {
@@ -6,6 +6,7 @@
   display: grid;
   place-items: center;
   padding: 1rem;
+  background: #fff5f5;
 }
 
 // Brand banner
@@ -38,11 +39,14 @@
   border-radius: 28px;
   border: 0;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  background: linear-gradient(180deg, rgba(189, 233, 230, 0.7), rgba(246, 172, 185, 0.85));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  $coral: #e17b7b;
+  $coral-dark: #cc6a6a;
+  background: radial-gradient(220px 220px at 110% -20%, rgba(255,255,255,.35), transparent),
+              linear-gradient(180deg, lighten($coral, 6%), $coral);
 
   .card-body {
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
     padding: 3rem 3.5rem;
 
     @media (max-width: 768px) {
@@ -61,10 +65,10 @@
     }
 
     .portal-title {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #495057;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+      color: #0f0f0f;
 
       @media (max-width: 768px) {
         font-size: 1.75rem;
@@ -72,8 +76,9 @@
     }
 
     .portal-subtitle {
-      color: #6c757d;
+      color: #5a2f2f;
       font-size: 1rem;
+      font-weight: 600;
     }
   }
 
@@ -92,16 +97,16 @@
       }
 
       .portal-input {
-        height: 38px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.8);
-        border-color: #ddd;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(0,0,0,.08);
         transition: all 0.15s ease;
 
         &:focus {
-          background: rgba(255, 255, 255, 0.95);
-          border-color: #80bdff;
-          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          background: rgba(255, 255, 255, 1);
+          border-color: #e17b7b;
+          box-shadow: 0 0 0 0.2rem rgba(225, 123, 123, 0.25);
         }
 
         &.is-invalid {
@@ -124,21 +129,22 @@
 
     .portal-submit {
       max-width: 340px;
-      margin: 16px auto 0;
+      margin: 18px auto 0;
       display: block;
       width: 100%;
-      padding: 0.75rem 2rem;
-      background: #ffffff;
+      padding: 0.9rem 2rem;
+      background: #111827;
+      color: #fff;
       border: 0;
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1) inset;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: all 0.15s ease;
+      border-radius: 12px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.15);
+      transition: transform .06s ease, filter .15s ease;
 
       &:hover {
-        background: #f7f7f7;
+        filter: brightness(1.05);
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
       &:active {
@@ -176,8 +182,8 @@
 .form-check {
   .form-check-input {
     &:checked {
-      background-color: #007bff;
-      border-color: #007bff;
+      background-color: #e17b7b;
+      border-color: #e17b7b;
     }
   }
 

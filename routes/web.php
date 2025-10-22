@@ -23,9 +23,7 @@ use App\Http\Controllers\Admin\ProfileController;
 */
 
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('admin.dashboard');
-    }
+    // Always show the public landing page at root, even if logged in
     return view('welcome');
 });
 
@@ -34,7 +32,9 @@ Auth::routes();
 // Logout route
 Route::post('/logout', function () {
     Auth::logout();
-    return redirect('/');
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
 })->name('logout');
 
 // Admin Routes - Using proper individual controllers

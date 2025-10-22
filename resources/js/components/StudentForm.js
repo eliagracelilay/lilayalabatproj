@@ -98,7 +98,9 @@ const StudentForm = ({ student = null, isEdit = false }) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [name]: value,
+            // If department changes, clear the selected course so the user picks from filtered list
+            ...(name === 'department_id' ? { course_id: '' } : {})
         }));
         // Clear error when user starts typing
         if (errors[name]) {
@@ -153,11 +155,21 @@ const StudentForm = ({ student = null, isEdit = false }) => {
     return (
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">{isEdit ? 'Edit Student' : 'New Student'}</h4>
-                <a href="/admin/students" className="btn btn-outline-secondary">← Back to Students</a>
+                <div className="d-flex align-items-start gap-2 page-title-wrap">
+                    <div className="page-title-icon" aria-hidden="true">
+                        {/* simple mortarboard icon (SVG) */}
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.909V17h2V9L12 3zm0 13L4.5 11.5 12 8l7.5 3.5L12 16zm-6 1.5V20c0 1.657 3.582 3 8 3s8-1.343 8-3v-2.5c-1.773 1.12-5.004 1.833-8 1.833s-6.227-.713-8-1.833z"/></svg>
+                    </div>
+                    <div>
+                        <div className="page-title-text">{isEdit ? 'Edit Student' : 'Add New Students'}</div>
+                        <div className="page-subtitle-text">Fill in the student details below</div>
+                    </div>
+                </div>
+                {/* back button moved inside coral-form to match mockup */}
             </div>
 
-            <div className="form-container">
+            <div className="form-container coral-form">
+                <a href="/admin/students" className="btn btn-back back-over">← Back to Students</a>
                 <div className="form-card">
                     <div className="form-header">
                         <div className="form-title">{isEdit ? 'Edit Student Information' : 'Add New Student'}</div>
@@ -174,7 +186,6 @@ const StudentForm = ({ student = null, isEdit = false }) => {
                                     className={`form-control ${errors.full_name ? 'is-invalid' : ''}`}
                                     value={formData.full_name}
                                     onChange={handleChange}
-                                    placeholder="e.g., Raven Greg"
                                     required
                                 />
                                 {errors.full_name && <div className="invalid-feedback">{errors.full_name[0]}</div>}
@@ -247,7 +258,6 @@ const StudentForm = ({ student = null, isEdit = false }) => {
                                     className={`form-control ${errors.contact_number ? 'is-invalid' : ''}`}
                                     value={formData.contact_number}
                                     onChange={handleChange}
-                                    placeholder="e.g., 09649887606"
                                 />
                                 {errors.contact_number && <div className="invalid-feedback">{errors.contact_number[0]}</div>}
                             </div>
@@ -279,9 +289,15 @@ const StudentForm = ({ student = null, isEdit = false }) => {
                                     required
                                 >
                                     <option value="">— Select Course —</option>
-                                    {courses.map(course => (
-                                        <option key={course.id} value={course.id}>{course.title}</option>
-                                    ))}
+                                    {(
+                                        formData.department_id
+                                            ? courses.filter(c => String(c.department_id) === String(formData.department_id))
+                                            : courses
+                                      ).map(course => (
+                                        <option key={course.id} value={course.id}>
+                                            {course.code ? `${course.code} — ${course.title}` : course.title}
+                                        </option>
+                                      ))}
                                 </select>
                                 {errors.course_id && <div className="invalid-feedback">{errors.course_id[0]}</div>}
                             </div>
@@ -333,12 +349,12 @@ const StudentForm = ({ student = null, isEdit = false }) => {
                         <div className="form-actions">
                             <button 
                                 type="submit" 
-                                className="btn btn-brand"
+                                className="btn btn-save"
                                 disabled={loading}
                             >
                                 {loading ? 'Saving...' : (isEdit ? 'Update Student' : 'Create Student')}
                             </button>
-                            <a href="/admin/students" className="btn btn-outline-secondary">
+                            <a href="/admin/students" className="btn btn-cancel">
                                 Cancel
                             </a>
                         </div>

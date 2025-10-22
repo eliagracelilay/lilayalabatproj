@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\SettingsController;
 // Admin API routes (temporarily without auth for testing)
 Route::prefix('admin')->name('api.admin.')->group(function () {
     Route::get('/dashboard-stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
+    Route::get('/dashboard-activity', [DashboardController::class, 'getActivity'])->name('dashboard.activity');
     Route::get('/students', [StudentController::class, 'apiIndex'])->name('students.api');
     Route::post('/students', [StudentController::class, 'apiStore'])->name('students.store');
     Route::put('/students/{student}', [StudentController::class, 'apiUpdate'])->name('students.update');

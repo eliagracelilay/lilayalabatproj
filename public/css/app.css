@@ -11992,7 +11992,7 @@ html, body {
 
 body {
   font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(180deg, var(--brand-end) 0%, #f6acb9 45%, #e6e6e6 100%);
+  background: #f5f6f8;
   min-height: 100vh;
 }
 
@@ -12061,6 +12061,7 @@ label.form-label {
   display: grid;
   place-items: center;
   padding: 1rem;
+  background: #fff5f5;
 }
 
 .brand-banner {
@@ -12091,11 +12092,11 @@ label.form-label {
   border-radius: 28px;
   border: 0;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  background: linear-gradient(180deg, rgba(189, 233, 230, 0.7), rgba(246, 172, 185, 0.85));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  background: radial-gradient(220px 220px at 110% -20%, rgba(255, 255, 255, 0.35), transparent), linear-gradient(180deg, rgb(230.6666666667, 147.9333333333, 147.9333333333), #e17b7b);
 }
 .portal-card .card-body {
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   padding: 3rem 3.5rem;
 }
 @media (max-width: 768px) {
@@ -12112,10 +12113,10 @@ label.form-label {
   margin-bottom: 1rem;
 }
 .portal-card .portal-header .portal-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #495057;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+  color: #0f0f0f;
 }
 @media (max-width: 768px) {
   .portal-card .portal-header .portal-title {
@@ -12123,8 +12124,9 @@ label.form-label {
   }
 }
 .portal-card .portal-header .portal-subtitle {
-  color: #6c757d;
+  color: #5a2f2f;
   font-size: 1rem;
+  font-weight: 600;
 }
 .portal-card .portal-form {
   max-width: 520px;
@@ -12139,16 +12141,16 @@ label.form-label {
   margin-bottom: 0.5rem;
 }
 .portal-card .portal-form .form-group .portal-input {
-  height: 38px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.8);
-  border-color: #ddd;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
   transition: all 0.15s ease;
 }
 .portal-card .portal-form .form-group .portal-input:focus {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  background: rgb(255, 255, 255);
+  border-color: #e17b7b;
+  box-shadow: 0 0 0 0.2rem rgba(225, 123, 123, 0.25);
 }
 .portal-card .portal-form .form-group .portal-input.is-invalid {
   border-color: #dc3545;
@@ -12165,21 +12167,22 @@ label.form-label {
 }
 .portal-card .portal-form .portal-submit {
   max-width: 340px;
-  margin: 16px auto 0;
+  margin: 18px auto 0;
   display: block;
   width: 100%;
-  padding: 0.75rem 2rem;
-  background: #ffffff;
+  padding: 0.9rem 2rem;
+  background: #111827;
+  color: #fff;
   border: 0;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1) inset;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.15s ease;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+  transition: transform 0.06s ease, filter 0.15s ease;
 }
 .portal-card .portal-form .portal-submit:hover {
-  background: #f7f7f7;
+  filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .portal-card .portal-form .portal-submit:active {
   transform: translateY(0);
@@ -12207,8 +12210,8 @@ label.form-label {
 }
 
 .form-check .form-check-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #e17b7b;
+  border-color: #e17b7b;
 }
 .form-check .form-check-label {
   color: #6c757d;

@@ -107,45 +107,13 @@ const FacultiesIndex = () => {
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="mb-0">Faculty</h4>
-                <a href="/admin/faculties/create" className="btn btn-sm btn-brand">＋ New Faculty</a>
+                <div className="page-actions">
+                    <a href="/admin/settings?tab=security" className="btn btn-sm btn-archive-green">Archive</a>
+                    <a href="/admin/faculties/create" className="btn btn-sm btn-add-black">+ Add Faculty</a>
+                </div>
             </div>
 
-            <form className="faculty-filters">
-                <div className="row filter-row">
-                    <div className="col-auto">
-                        <input 
-                            type="text" 
-                            value={filters.q}
-                            onChange={(e) => handleFilterChange('q', e.target.value)}
-                            className="form-control filter-input" 
-                            placeholder="Search by ID/Name" 
-                        />
-                    </div>
-                    <div className="col-auto">
-                        <select 
-                            value={filters.department_filter}
-                            onChange={(e) => handleFilterChange('department_filter', e.target.value)}
-                            className="form-select filter-select"
-                        >
-                            <option value="">All Departments</option>
-                            {departments.map(dept => (
-                                <option key={dept.id} value={dept.id}>{dept.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    {hasActiveFilters && (
-                        <div className="col-auto">
-                            <button 
-                                type="button"
-                                onClick={clearFilters}
-                                className="btn btn-outline-danger clear-filters-btn"
-                            >
-                                Clear Filters
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </form>
+            {/* Filters removed per request */}
 
             <div className="faculties-table">
                 <div className="faculty-card card shadow-sm">

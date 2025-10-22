@@ -110,11 +110,19 @@ const FacultyForm = ({ faculty = null, isEdit = false }) => {
     return (
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">{isEdit ? 'Edit Faculty' : 'New Faculty'}</h4>
-                <a href="/admin/faculties" className="btn btn-outline-secondary">← Back to Faculty</a>
+                <div className="d-flex align-items-start gap-2 page-title-wrap">
+                    <div className="page-title-icon" aria-hidden="true">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.909V17h2V9L12 3zm0 13L4.5 11.5 12 8l7.5 3.5L12 16zm-6 1.5V20c0 1.657 3.582 3 8 3s8-1.343 8-3v-2.5c-1.773 1.12-5.004 1.833-8 1.833s-6.227-.713-8-1.833z"/></svg>
+                    </div>
+                    <div>
+                        <div className="page-title-text">{isEdit ? 'Edit Faculty' : 'Add New Faculty'}</div>
+                        <div className="page-subtitle-text">Fill in the faculty member details below</div>
+                    </div>
+                </div>
+                <a href="/admin/faculties" className="btn btn-back">← Back to Faculty</a>
             </div>
 
-            <div className="form-container">
+            <div className="form-container coral-form">
                 <div className="form-card">
                     <div className="form-header">
                         <div className="form-title">{isEdit ? 'Edit Faculty Information' : 'Add New Faculty'}</div>
@@ -131,7 +139,6 @@ const FacultyForm = ({ faculty = null, isEdit = false }) => {
                                     className={`form-control ${errors.full_name ? 'is-invalid' : ''}`}
                                     value={formData.full_name}
                                     onChange={handleChange}
-                                    placeholder="e.g., Maria Phoebe"
                                     required
                                 />
                                 {errors.full_name && <div className="invalid-feedback">{errors.full_name[0]}</div>}
@@ -192,7 +199,6 @@ const FacultyForm = ({ faculty = null, isEdit = false }) => {
                                     className={`form-control ${errors.contact_number ? 'is-invalid' : ''}`}
                                     value={formData.contact_number}
                                     onChange={handleChange}
-                                    placeholder="e.g., 09649887606"
                                 />
                                 {errors.contact_number && <div className="invalid-feedback">{errors.contact_number[0]}</div>}
                             </div>
@@ -260,12 +266,12 @@ const FacultyForm = ({ faculty = null, isEdit = false }) => {
                         <div className="form-actions">
                             <button 
                                 type="submit" 
-                                className="btn btn-brand"
+                                className="btn btn-save"
                                 disabled={loading}
                             >
                                 {loading ? 'Saving...' : (isEdit ? 'Update Faculty' : 'Create Faculty')}
                             </button>
-                            <a href="/admin/faculties" className="btn btn-outline-secondary">
+                            <a href="/admin/faculties" className="btn btn-cancel">
                                 Cancel
                             </a>
                         </div>

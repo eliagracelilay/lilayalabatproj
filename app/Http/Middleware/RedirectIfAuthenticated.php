@@ -23,6 +23,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                // If the user is already authenticated but is explicitly visiting /login,
+                // let the request proceed so the login form can appear (demo/testing behavior).
+                if ($request->is('login')) {
+                    return $next($request);
+                }
                 return redirect(RouteServiceProvider::HOME);
             }
         }

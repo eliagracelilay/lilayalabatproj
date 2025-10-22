@@ -76,36 +76,7 @@ const CoursesView = () => {
                 </a>
             </div>
 
-            {/* Filters */}
-            <div className="card mb-3">
-                <div className="card-body">
-                    <div className="row g-3">
-                        <div className="col-md-6">
-                            <label className="form-label">Search Courses</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by code or title..."
-                                value={filters.q}
-                                onChange={(e) => handleFilterChange('q', e.target.value)}
-                            />
-                        </div>
-                        <div className="col-md-6">
-                            <label className="form-label">Filter by Department</label>
-                            <select
-                                className="form-select"
-                                value={filters.department_id}
-                                onChange={(e) => handleFilterChange('department_id', e.target.value)}
-                            >
-                                <option value="">All Departments</option>
-                                {departments.map(dept => (
-                                    <option key={dept.id} value={dept.id}>{dept.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Filters removed per request */}
 
             {/* Courses Table */}
             <div className="card">

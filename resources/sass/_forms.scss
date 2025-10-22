@@ -88,24 +88,14 @@
       -moz-appearance: none;
       
       // Remove IE dropdown arrow
-      &::-ms-expand {
-        display: none;
-      }
+      &::-ms-expand { display: none; }
       
-      // Clean, simple dropdown arrow - no zigzag
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23666666' d='M6 8L2 4h8z'/%3e%3c/svg%3e");
+      // Disable custom SVG background to avoid zigzag artifacts on some browsers
+      background-image: none !important;
       background-repeat: no-repeat;
       background-position: right 0.75rem center;
       background-size: 12px 12px;
       padding-right: 2.5rem;
-      
-      &:focus {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23007bff' d='M6 8L2 4h8z'/%3e%3c/svg%3e");
-      }
-      
-      &:disabled {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%23cccccc' d='M6 8L2 4h8z'/%3e%3c/svg%3e");
-      }
     }
   }
 
@@ -116,35 +106,58 @@
     border-top: 1px solid #e9ecef;
     display: flex;
     gap: 0.75rem;
-    justify-content: flex-start;
+    justify-content: flex-end;
 
     .btn {
       padding: 0.75rem 2rem;
       font-weight: 500;
-      border-radius: 8px;
+      border-radius: 9999px;
       transition: all 0.15s ease;
 
-      &.btn-brand {
-        background: #ffffff;
-        border: 1px solid #dee2e6;
-        color: #495057;
-        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1) inset;
-
-        &:hover {
-          background: #f7f7f7;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+      &.btn-save {
+        background: #6a73d8;
+        color: #fff;
+        border: 0;
+        border-radius: 9999px;
+        padding: 0.55rem 1.4rem;
+        font-weight: 600;
       }
-
-      &.btn-outline-secondary {
-        &:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+      &.btn-cancel {
+        background: #f1f1f1;
+        color: #c0392b;
+        border: 0;
+        border-radius: 9999px;
+        padding: 0.55rem 1.2rem;
+        font-weight: 600;
       }
     }
   }
+
+  // Back button pill in header
+  .btn-back {
+    background: #6b6b6b;
+    color: #fff;
+    border: 0;
+    border-radius: 9999px;
+    padding: 0.35rem 0.9rem;
+    font-weight: 600;
+  }
+}
+
+// Input look: soft gray like mockup
+.form-container .form-group .form-control,
+.form-container .form-group .form-select,
+.form-container textarea.form-control {
+  background: #efefef;
+  border: 1px solid #e0e0e0;
+}
+
+.form-container .form-group .form-control:focus,
+.form-container .form-group .form-select:focus,
+.form-container textarea.form-control:focus {
+  background: #f6f6f6;
+  border-color: #d0d0d0;
+  box-shadow: none;
 }
 
 // Grid Layout for Forms
