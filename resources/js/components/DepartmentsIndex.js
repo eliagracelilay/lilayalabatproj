@@ -179,7 +179,10 @@ const DepartmentsIndex = () => {
     return (
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">Departments</h4>
+                <div>
+                    <h4 className="mb-0">Departments</h4>
+                    <div className="text-muted small">Organize academic departments</div>
+                </div>
                 <button onClick={handleAddNew} className="btn btn-sm btn-brand">＋ Add New Department</button>
             </div>
 

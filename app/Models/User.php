@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'first_name',
+        'last_name',
+        'phone',
+        'avatar_path',
     ];
 
     /**
@@ -51,5 +55,10 @@ class User extends Authenticatable
     public function hasRole($roleName)
     {
         return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    public function adminProfile()
+    {
+        return $this->hasOne(AdminProfile::class);
     }
 }

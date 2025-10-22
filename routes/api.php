@@ -26,7 +26,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingsController;
 
-// Admin API routes (temporarily without auth for testing)
+// Admin API routes (stateless; used by the React admin UI)
 Route::prefix('admin')->name('api.admin.')->group(function () {
     Route::get('/dashboard-stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
     Route::get('/dashboard-activity', [DashboardController::class, 'getActivity'])->name('dashboard.activity');
@@ -47,10 +47,8 @@ Route::prefix('admin')->name('api.admin.')->group(function () {
     Route::put('/departments/{department}', [DepartmentController::class, 'apiUpdate'])->name('departments.update');
     Route::patch('/departments/{department}/archive', [DepartmentController::class, 'archive'])->name('departments.archive');
     Route::get('/reports', [ReportController::class, 'apiIndex'])->name('reports.api');
-    // Settings/profile and archive/restore endpoints (moved from web.php)
+    // Settings/profile and archive/restore endpoints
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
-    Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile/archive', [\App\Http\Controllers\Admin\ProfileController::class, 'archive'])->name('profile.archive');
 
     // Security tab restoration routes
     Route::post('/settings/profiles/{id}/restore', [\App\Http\Controllers\Admin\SettingsController::class, 'restoreProfile'])->name('settings.profiles.restore');

@@ -144,7 +144,10 @@ const StudentsIndex = () => {
                 </div>
             )}
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">Students</h4>
+                <div>
+                    <h4 className="mb-0">Students</h4>
+                    <div className="text-muted small">Maintain and update student records and enrollment details.</div>
+                </div>
                 <div className="page-actions">
                     <a href="/admin/settings?tab=security" className="btn btn-sm btn-archive-green">Archive</a>
                     <a href="/admin/students/create" className="btn btn-sm btn-add-black">+ Add Student</a>

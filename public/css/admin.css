@@ -12947,6 +12947,9 @@ textarea.form-control-lg {
   white-space: nowrap;
 }
 
+.faculties-table {
+  margin-top: 0.75rem;
+}
 .faculties-table .page-actions {
   display: flex;
   gap: 0.6rem;
@@ -12999,13 +13002,14 @@ textarea.form-control-lg {
   background: #ffffff;
   border-radius: 14px;
   padding: 0;
+  overflow: hidden;
 }
 .faculties-table .faculty-card .table {
   margin-bottom: 0;
 }
 .faculties-table .faculty-card .table th {
   background-color: rgba(255, 255, 255, 0.8);
-  border-bottom: 2px solid #f3dede;
+  border-bottom: 2px solid #f1d4d4;
   font-weight: 700;
   color: #0f0f0f;
   padding: 1rem 0.75rem;
@@ -13022,7 +13026,7 @@ textarea.form-control-lg {
   background-color: #fff7f7;
 }
 .faculties-table .faculty-card .table tbody tr:last-child td {
-  border-bottom: none;
+  border-bottom: none !important;
 }
 .faculties-table .employee-no {
   font-weight: 600;

@@ -46,16 +46,19 @@ const AdminLayout = ({ children, user }) => {
                         </a>
                         
                         <div className="side-footer mt-4">
-                            <a href="/admin/profile" className="admin-section" style={{ textDecoration: 'none', color: 'inherit' }}>
-                                <div className="small text-muted mb-1">Administrator</div>
-                                <div className="small fw-semibold">Admin</div>
+                            <a href="/admin/profile" className="admin-section d-flex align-items-center" style={{ textDecoration: 'none', color: 'inherit', gap: '8px' }}>
+                                <span aria-hidden="true" style={{ fontSize: '1.1rem' }}>👤</span>
+                                <div>
+                                    <div className="fw-semibold" style={{ lineHeight: 1.2 }}>My Profile</div>
+                                    <div className="small text-muted" style={{ lineHeight: 1.2 }}>Admin</div>
+                                </div>
                             </a>
                             <button 
                                 onClick={handleSignOut}
-                                className="btn btn-outline-danger btn-sm mt-2 w-100"
-                                style={{ fontSize: '0.875rem' }}
+                                className="btn btn-link text-danger p-0 mt-2"
+                                style={{ fontSize: '0.95rem', textDecoration: 'none' }}
                             >
-                                🚪 Sign Out
+                                <span aria-hidden="true" className="me-1">↪</span> Sign Out
                             </button>
                         </div>
                     </div>

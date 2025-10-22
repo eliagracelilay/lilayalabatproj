@@ -73,6 +73,7 @@
     <!-- Pass data to JavaScript -->
     <script>
         window.adminUser = @json(auth()->user());
+        window.adminProfile = @json($adminProfile ?? null);
         window.adminStats = @json($stats ?? []);
         window.archivedProfiles = @json($archivedProfiles ?? []);
         window.archivedItems = @json($archivedItems ?? []);

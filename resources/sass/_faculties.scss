@@ -31,6 +31,7 @@ $shell: #fff7f7;
 
 // Faculty Table Styles
 .faculties-table {
+  margin-top: 0.75rem;
   // Top-right actions container (if present in markup)
   .page-actions { display:flex; gap:.6rem; justify-content:flex-end; align-items:center; }
 
@@ -64,6 +65,7 @@ $shell: #fff7f7;
       background: #ffffff;
       border-radius: 14px;
       padding: 0;
+      overflow: hidden; // keep rounded corners clean
     }
 
     .table {
@@ -71,7 +73,7 @@ $shell: #fff7f7;
 
       th {
         background-color: rgba(255,255,255,.8);
-        border-bottom: 2px solid #f3dede;
+        border-bottom: 2px solid #f1d4d4; // match Students header divider
         font-weight: 700;
         color: #0f0f0f;
         padding: 1rem 0.75rem;
@@ -87,9 +89,7 @@ $shell: #fff7f7;
         transition: background-color 0.15s ease;
         &:hover { background-color: #fff7f7; }
 
-        &:last-child td {
-          border-bottom: none;
-        }
+        &:last-child td { border-bottom: none !important; }
       }
     }
   }

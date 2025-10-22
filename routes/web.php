@@ -77,6 +77,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     
     // Profile routes (GET page only) — update/archive moved to API
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+    // (removed here; relocated below outside /admin group)
+});
+
+// Session-authenticated API shim so JS can call /api/admin/profile with cookies
+Route::middleware(['auth'])->prefix('api/admin')->name('api.admin.')->group(function () {
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/archive', [ProfileController::class, 'archive'])->name('profile.archive');
 });
 
 // NOTE: API routes (previously here) were moved to routes/api.php

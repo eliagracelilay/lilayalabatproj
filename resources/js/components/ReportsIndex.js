@@ -143,6 +143,13 @@ const ReportsIndex = () => {
 
     return (
         <AdminLayout>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h4 className="mb-0">Reports</h4>
+                    <div className="text-muted small">Generate summaries and export data</div>
+                </div>
+            </div>
+
             <div className="reports-container">
                 <div className="report-settings">
                     <div className="report-pill">⚙️ Report Settings</div>
@@ -196,16 +203,7 @@ const ReportsIndex = () => {
                     </div>
                 </div>
 
-                {Object.keys(summary).length > 0 && (
-                    <div className="applied-filters">
-                        <div className="filters-label">Applied Filters</div>
-                        <div className="filters-list">
-                            {Object.entries(summary).map(([key, value]) => (
-                                <span key={key} className="filter-badge">{key}: {value}</span>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                {/* Applied Filters section removed per request */}
 
                 <div className="report-table">
                     <div className="report-card card">

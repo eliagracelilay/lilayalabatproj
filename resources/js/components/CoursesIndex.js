@@ -225,7 +225,10 @@ const CoursesIndex = () => {
     return (
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">Courses</h4>
+                <div>
+                    <h4 className="mb-0">Courses</h4>
+                    <div className="text-muted small">Create and manage course offerings</div>
+                </div>
                 <button onClick={handleAddNew} className="btn btn-sm btn-brand">＋ Add New Course</button>
             </div>
 

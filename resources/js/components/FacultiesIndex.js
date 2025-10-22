@@ -106,7 +106,10 @@ const FacultiesIndex = () => {
     return (
         <AdminLayout>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="mb-0">Faculty</h4>
+                <div>
+                    <h4 className="mb-0">Faculty</h4>
+                    <div className="text-muted small">Handle management and supervision of faculty and academic staff..</div>
+                </div>
                 <div className="page-actions">
                     <a href="/admin/settings?tab=security" className="btn btn-sm btn-archive-green">Archive</a>
                     <a href="/admin/faculties/create" className="btn btn-sm btn-add-black">+ Add Faculty</a>
